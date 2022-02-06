@@ -6,7 +6,7 @@ const app = express();
 const cors = require("cors");
 
 const corsOptions = {
-  origin: "https://gallant-albattani-115495.netlify.app",
+  origin: "http://localhost:3000",
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
@@ -34,4 +34,5 @@ metriics.map((m) => {
   });
 });
 
+// 2) Routes
 module.exports = app;
