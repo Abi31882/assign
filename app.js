@@ -1,12 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
-const metriics = require("./public/assignment-data/metrics.json");
-const appRouter = require("./routes/appRoutes");
+const userRouter = require("./routes/userRoutes");
+const discussionRouter = require("./routes/discussionRoutes");
+const replyRouter = require("./routes/replyRoutes");
 const app = express();
 const cors = require("cors");
+const globalErrorHandler = require("./controllers/errorController");
 
 const corsOptions = {
-  origin: "https://gallant-albattani-115495.netlify.app",
+  origin: "https://vibrant-ardinghelli-cbae73.netlify.app",
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
@@ -23,16 +25,16 @@ if (process.env.NODE_ENV === "production") {
   console.log("production");
 }
 
-app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/public/assignment-data/metrics.json`);
+app.use("/user", userRouter);
+app.use("/discussion", discussionRouter);
+app.use("/reply", replyRouter);
+
+app.all("*", (req, res, next) => {
+  next();
+  return res.json(`can't find ${req.originalUrl} on this server`);
 });
 
-metriics.map((m) => {
-  m._id;
-  app.get(`/${m._id}`, (req, res) => {
-    res.sendFile(`${__dirname}/public/assignment-data/${m._id}.json`);
-  });
-});
+app.use(globalErrorHandler);
 
 // 2) Routes
 module.exports = app;
